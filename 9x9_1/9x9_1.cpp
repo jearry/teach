@@ -6,7 +6,6 @@ int main()
     int b = 1;
 
     while (a <= 9){
-
         b = 1;
         while (b <= a){
             printf("%d * %d = %d  ", b, a, a*b);
