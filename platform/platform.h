@@ -3,5 +3,9 @@
 
 int kbhit();
 
+void clrsrc();
+
+void Sleep(int ms);
+
 #endif
 

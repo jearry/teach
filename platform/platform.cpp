@@ -4,35 +4,59 @@
 #include <curses.h>
 #include <unistd.h>
 
-static struct termios initial_settings, new_settings;
 
-
-void init_keyboard()
+void changemode(int dir)
 {
-    tcgetattr(0,&initial_settings);
-    new_settings = initial_settings;
-    new_settings.c_lflag &= ~ICANON;
-    new_settings.c_lflag &= ~ECHO;
-    new_settings.c_lflag &= ~ISIG;
-    new_settings.c_cc[VMIN] = 1;
-    new_settings.c_cc[VTIME] = 0;
-    tcsetattr(0, TCSANOW, &new_settings);
+    static struct termios oldt, newt;
+
+    if ( dir == 1 ){
+        tcgetattr( STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~( ICANON | ECHO );
+        tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+    }else{
+        tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
+    }
 }
 
 
-void close_keyboard()
+void clrsrc()
 {
-    tcsetattr(0, TCSANOW, &initial_settings);
+    printf("\033c");
 }
+
+
 
 class platform_init{
 public:
     platform_init(){
-        init_keyboard();
+        changemode(1);
     }
     ~platform_init(){
-        close_keyboard();
+        changemode(0);
     }
 };
 
-static platform_init pi;
+static platform_init s_pi;
+
+int kbhit (void)
+{
+    struct timeval tv;
+    fd_set rdfs;
+
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    FD_ZERO(&rdfs);
+    FD_SET (STDIN_FILENO, &rdfs);
+
+    select(STDIN_FILENO+1, &rdfs, NULL, NULL, &tv);
+    return FD_ISSET(STDIN_FILENO, &rdfs);
+}
+
+void Sleep(int ms)
+{
+    usleep(ms * 1000);
+}
+
+
