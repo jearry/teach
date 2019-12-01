@@ -100,7 +100,7 @@ void updateWithInput()  // 与用户输入有关的更新
     }
 }
 
-void plan_game()
+void plane_game()
 {
     startup();  // 数据初始化
     while (1) //  游戏循环执行

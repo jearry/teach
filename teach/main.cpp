@@ -117,5 +117,5 @@ int main()
 {
     //ball();
     //plane();
-    plan_game();
+    plane_game();
 }

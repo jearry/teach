@@ -20,6 +20,21 @@ void changemode(int dir)
 }
 
 
+#if defined(_WINDOWS)
+void gotoxy(int x, int y)
+{
+    COORD pos = {x,y};
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hOut, pos);
+}
+#else
+void gotoxy(int x,int y)   //Fantasy
+{
+   printf("%c[%d;%df",0x1B,y,x);
+}
+#endif
+
+
 void clrsrc()
 {
     printf("\033c");

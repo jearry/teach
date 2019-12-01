@@ -1,6 +1,6 @@
 #ifndef PLAN_GAME_H
 #define PLAN_GAME_H
 
-void plan_game();
+void plane_game();
 
 #endif // PLAN_GAME_H
